@@ -108,13 +108,21 @@ You can adjust these settings at the top of `scraper.py`:
 5. **Enriches** jobs missing location data by visiting individual job pages
 6. **Exports** the clean data to JSON and CSV files
 
-## Notes
+## 💡 Technical Challenges & Solutions
 
-- The scraper uses a polite 1.5-second delay between requests to be respectful to the server
-- Merojob.com uses Next.js for rendering, so the scraper extracts data from embedded script tags rather than visible HTML
-- If the website structure changes, the scraper may need updates
-- This scraper is for educational and personal use only
+### 1. Handling Next.js RSC Streams
+Modern websites like Merojob move away from static HTML to **React Server Components (RSC)**. The data isn't in the HTML tags; it's streamed in a `self.__next_f.push()` script block.
+- **Solution:** I implemented a custom regex-based JSON parser that extracts these dynamic fragments and converts them into structured Python objects.
 
-## License
+### 2. Polite Rate Limiting
+Scraping too fast can get your IP blocked. 
+- **Solution:** Integrated a `Session` object with custom headers and a `1.5s` request delay to mimic human behavior and stay within fair-use limits.
 
-This project is provided as-is for educational purposes.
+### 3. Data Cleaning
+Raw data is often messy (duplicate slugs, inconsistent company names).
+- **Solution:** Used Python `Sets` for O(1) deduplication and custom heuristics to "guess" company names when missing from the primary data stream.
+
+## 📁 Sample Data for Interviews
+To see the results without running the code, check the `samples/` directory:
+- [Sample JSON](samples/sample_jobs.json)
+- [Sample CSV](samples/sample_jobs.csv)

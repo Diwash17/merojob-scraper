@@ -12,6 +12,9 @@ venv/
 jobs.json
 jobs.csv
 
+# Allow tracking of sample data for portfolio purposes
+!samples/
+
 # OS files
 .DS_Store
 Thumbs.db
